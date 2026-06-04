@@ -254,7 +254,7 @@ weather-dashboard/
 
 Displays current weather conditions, AQI, forecasts, and interactive maps.
 
-![Main Dashboard](screenshots/dashboard.png)
+![Main Dashboard](screenshots/Dashboard with temperature.png)
 
 ### Weather Range Explorer
 

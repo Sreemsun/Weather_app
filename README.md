@@ -252,27 +252,19 @@ weather-dashboard/
 
 ### Main Dashboard
 
-Displays current weather conditions, AQI, forecasts, and interactive maps.
+![Main Dashboard](screenshots/dashboard.png)
 
-![Main Dashboard](screenshots/Dashboard with temperature.png)
+### Weather Forecast & Weather Data
 
-### Weather Range Explorer
-
-Save and retrieve weather information for custom date ranges.
-
-![Weather Range Explorer](screenshots/range-explorer.png)
+![Forecast](screenshots/forecast.png)
 
 ### Location Comparison
 
-Compare temperature, AQI, and weather conditions between locations.
-
-![Location Comparison](screenshots/comparison.png)
+![Comparison](screenshots/comparison.png)
 
 ### Video Recommendations
 
-View location-related YouTube content directly from the dashboard.
-
-![Video Recommendations](screenshots/videos.png)
+![Videos](screenshots/videos.png)
 
 ---
 

@@ -647,21 +647,6 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [weather?.location]);
 
-  // Compare summary: hottest location and worst AQI among main + compareList
-  const compareSummary = (() => {
-    const items: Array<{ label: string; temp?: number | null; aqi?: number | null }> = [];
-    if (weather) items.push({ label: weather.location ?? 'Main', temp: weather.temperatureC ?? null, aqi: weather.usAqi ?? null });
-    for (const c of compareList) {
-      if (c.weather) items.push({ label: c.label, temp: c.weather.temperatureC ?? null, aqi: c.weather.usAqi ?? null });
-    }
-    if (!items.length) return null;
-    const byTemp = items.filter((it) => typeof it.temp === 'number');
-    const byAqi = items.filter((it) => typeof it.aqi === 'number');
-    const hottest = byTemp.length ? byTemp.reduce((a, b) => ( (b.temp ?? -Infinity) > (a.temp ?? -Infinity) ? b : a )) : null;
-    const worstAqi = byAqi.length ? byAqi.reduce((a, b) => ( (b.aqi ?? -Infinity) > (a.aqi ?? -Infinity) ? b : a )) : null;
-    return { hottest, worstAqi } as { hottest: { label: string; temp?: number | null } | null; worstAqi: { label: string; aqi?: number | null } | null };
-  })();
-
   return (
     <main className={backgroundClass}>
       <AnimatedBackground themeKey={themeKey} />
@@ -1146,16 +1131,6 @@ function App() {
               <div className="section-header">
                 <h2>Compare Locations</h2>
               </div>
-              {compareSummary ? (
-                <div className="compare-summary-block">
-                  {compareSummary.hottest ? (
-                    <div className="compare-summary-line">Hottest: <strong>{compareSummary.hottest.label}</strong>{compareSummary.hottest.temp != null ? ` — ${compareSummary.hottest.temp}°C` : ''}</div>
-                  ) : null}
-                  {compareSummary.worstAqi ? (
-                    <div className="compare-summary-line">Worst AQI: <strong>{compareSummary.worstAqi.label}</strong>{compareSummary.worstAqi.aqi != null ? ` — ${compareSummary.worstAqi.aqi}` : ''}</div>
-                  ) : null}
-                </div>
-              ) : null}
 
               <div className="compare-layout">
                 <div className="compare-left">
@@ -1200,31 +1175,27 @@ function App() {
                               <button className="location-button secondary" type="button" onClick={() => handleRemoveCompare(c.label)}>Remove</button>
                             </div>
                           </div>
-                      {c.weather ? (
-                        <>
-                          <div style={{ marginTop: 8 }}>{c.weather.location}</div>
-                          <div style={{ fontSize: '1.5rem', marginTop: 6 }}>{c.weather.temperatureC}°C</div>
-                          <div style={{ color: 'var(--muted)', marginTop: 6 }}>{c.weather.summary}</div>
-                          <div style={{ marginTop: 8 }}>AQI: {c.weather.usAqi ?? 'N/A'}</div>
-                          {weather ? (() => {
-                            const tempDelta = c.weather!.temperatureC - weather.temperatureC;
-                            const aqiDelta = (c.weather!.usAqi ?? 0) - (weather.usAqi ?? 0);
-                            return (
-                              <div style={{ marginTop: 8 }}>
-                                <div style={{ fontWeight: 700 }}>Delta</div>
-                                <div className="compare-delta" style={{ marginTop: 6 }}>
-                                  <span style={{ color: tempDelta > 0 ? '#ffb366' : '#88e090', fontWeight: 700 }}>{tempDelta > 0 ? '+' : ''}{tempDelta}°C</span>
-                                  <span style={{ color: aqiDelta > 0 ? '#ff6b6b' : '#88e090', fontWeight: 700 }}>{aqiDelta > 0 ? '+' : ''}{aqiDelta} AQI</span>
-                                </div>
-                                <div className="compare-conclusion" style={{ color: tempDelta > 0 ? '#ffb366' : '#88e090' }}>
-                                  {tempDelta === 0 ? 'Same temperature' : (tempDelta > 0 ? `Hotter by ${tempDelta}°C` : `Cooler by ${Math.abs(tempDelta)}°C`)}
-                                  {aqiDelta !== 0 ? ` · ${aqiDelta > 0 ? 'Worse AQI by +' : 'Better AQI by '}${Math.abs(aqiDelta)}` : ''}
-                                </div>
-                              </div>
-                            );
-                          })() : null}
-                        </>
-                      ) : <div className="empty-state-inline">Loading…</div>}
+                          {c.weather ? (
+                            <>
+                              <div style={{ marginTop: 8 }}>{c.weather.location}</div>
+                              <div style={{ fontSize: '1.5rem', marginTop: 6 }}>{c.weather.temperatureC}°C</div>
+                              <div style={{ color: 'var(--muted)', marginTop: 6 }}>{c.weather.summary}</div>
+                              <div style={{ marginTop: 8 }}>AQI: {c.weather.usAqi ?? 'N/A'}</div>
+                              {weather ? (() => {
+                                const tempDelta = c.weather!.temperatureC - weather.temperatureC;
+                                const aqiDelta = (c.weather!.usAqi ?? 0) - (weather.usAqi ?? 0);
+                                return (
+                                  <div style={{ marginTop: 8 }}>
+                                    <div style={{ fontWeight: 700 }}>Delta</div>
+                                    <div style={{ marginTop: 6 }}>
+                                      <span style={{ color: tempDelta > 0 ? '#ff9933' : '#55a84f', fontWeight: 700 }}>{tempDelta > 0 ? '+' : ''}{tempDelta}°C</span>
+                                      <span style={{ marginLeft: 12, color: aqiDelta > 0 ? '#cc0033' : '#55a84f', fontWeight: 700 }}>{aqiDelta > 0 ? '+' : ''}{aqiDelta} AQI</span>
+                                    </div>
+                                  </div>
+                                );
+                              })() : null}
+                            </>
+                          ) : <div className="empty-state-inline">Loading…</div>}
                         </div>
                       )) : (
                         <div className="compare-card"><div className="empty-state-inline">No compare locations added.</div></div>
@@ -1237,6 +1208,18 @@ function App() {
           </section>
         </div>
       </section>
+
+      <footer className="pm-footer">
+        <div className="pm-footer-card">
+          <h2>Developer Information</h2>
+          <p><strong>Developed By:</strong> Sreemsun Anand</p>
+
+          <h2>About PM Accelerator</h2>
+          <p>
+            The Product Manager Accelerator Program is designed to support PM professionals through every stage of their careers. From students looking for entry-level jobs to Directors looking to take on a leadership role, our program has helped over hundreds of students fulfill their career aspirations.
+          </p>
+        </div>
+      </footer>
 
     </main>
   );

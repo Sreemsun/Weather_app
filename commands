@@ -1,0 +1,6 @@
+backend : 
+cd backend
+python -m uvicorn app.main:app --reload --port 8000
+
+forntend:
+npm run dev

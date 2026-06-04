@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/animatedbackground.tsx","./src/components/locationmap.tsx","./src/components/videospanel.tsx","./src/lib/alerts.ts","./src/lib/aqi.ts","./src/lib/weather.ts"],"version":"5.9.3"}

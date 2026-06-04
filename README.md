@@ -258,6 +258,12 @@ weather-dashboard/
 
 ![Forecast](screenshots/forecast.png)
 
+### Weather Range Explorer
+
+Save weather records, retrieve historical weather data, and generate PDF reports for selected date ranges.
+
+![Weather Range Explorer](screenshots/Weather%20range.png)
+
 ### Location Comparison
 
 ![Comparison](screenshots/comparison.png)
